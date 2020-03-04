@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:windowTranslucentStatus="true"
+    android:background="@color/background"
+    >
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id_for_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity ="center"
+        android:fillViewport="true"
+        android:layout_marginBottom="10dp"
+        >
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/progress_layout"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:background="@drawable/widget_theme0"
+                android:padding="15dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+                        <TextView
+                            android:id="@+id/range"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="4"
+                            android:layout_marginBottom="2dp"
+                            android:textColor="@color/theme0_text"
+                            android:autoSizeStepGranularity="1sp"
+                            android:autoSizeMaxTextSize="15sp"
+                            android:autoSizeMinTextSize="8sp"
+                            android:autoSizeTextType="uniform"
+                            android:text="월요일 - 일요일"/>
+                        <TextView
+                            android:id="@+id/title"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="7"
+                            android:textColor="@color/theme0_text"
+                            android:autoSizeTextType="uniform"
+                            android:autoSizeStepGranularity="1sp"
+                            android:autoSizeMaxTextSize="20sp"
+                            android:text="이번 주"/>
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/percent"
+                        android:textColor="@color/theme0_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="top"
+                        android:paddingStart="2dp"
+                        android:gravity="end"
+                        android:textStyle="bold"
+                        android:textSize="35sp"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeStepGranularity="1sp"
+                        android:autoSizeMinTextSize="23sp"
+                        android:text="@string/percent"/>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:orientation="horizontal"
+                    android:gravity="end">
+                    <TextView
+                        android:id="@+id/current"
+                        android:textColor="@color/theme0_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:textSize="15sp"
+                        android:text="@string/current"/>
+                </LinearLayout>
+
+                <ProgressBar style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:id="@+id/progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="8dp"
+                    android:max="100"
+                    android:progress="37"
+                    android:progressDrawable="@drawable/progressbar_theme"
+                    />
+            </LinearLayout>
+
+            <TextView style="@style/titleStyle"
+                android:text="@string/setTheme"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                style="@style/recyclerView"
+                android:id="@+id/recyclerView"
+                />
+
+            <TextView style="@style/titleStyle"
+                android:text="@string/setRange"/>
+
+            <RadioGroup
+                android:id="@+id/radioGroup"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                >
+                <RadioButton style="@style/radioButton"
+                    android:id="@+id/rg_btn1"
+                    android:text="@string/today"
+                    android:background="@drawable/preview_bt_round"
+                    />
+                <RadioButton style="@style/radioButton"
+                    android:id="@+id/rg_btn2"
+                    android:text="@string/week"
+                    android:background="@drawable/preview_bt_round"
+                    />
+                <RadioButton style="@style/radioButton"
+                    android:id="@+id/rg_btn3"
+                    android:text="@string/month"
+                    android:background="@drawable/preview_bt_round"
+                    />
+                <RadioButton style="@style/radioButton"
+                    android:id="@+id/rg_btn4"
+                    android:text="@string/year"
+                    android:background="@drawable/preview_bt_round"
+                    />
+            </RadioGroup>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button style="@style/submitButton"
+        android:id="@+id/submit"/>
+</LinearLayout>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:windowTranslucentStatus="true"
+    android:background="@color/background"
+    >
+
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_unit_id_for_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity ="center"
+        android:fillViewport="true"
+        android:layout_marginBottom="10dp"
+        >
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/progress_layout"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:background="@drawable/widget_theme0"
+                android:padding="15dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:paddingRight="8dp">
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="4">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+                            <TextView
+                                android:textColor="@color/theme0_text"
+                                android:id="@+id/range"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="4"
+                                android:layout_marginBottom="2dp"
+                                android:autoSizeStepGranularity="1sp"
+                                android:autoSizeMaxTextSize="15sp"
+                                android:autoSizeMinTextSize="8sp"
+                                android:autoSizeTextType="uniform"
+                                android:text="월요일 - 일요일"/>
+                            <TextView
+                                android:textColor="@color/theme0_text"
+                                android:id="@+id/title"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="7"
+                                android:autoSizeTextType="uniform"
+                                android:autoSizeStepGranularity="1sp"
+                                android:autoSizeMaxTextSize="20sp"
+                                android:text="이번 주"/>
+                        </LinearLayout>
+                        <TextView
+                            android:textColor="@color/theme0_text"
+                            android:id="@+id/percent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="top"
+                            android:paddingStart="2dp"
+                            android:gravity="end"
+                            android:textStyle="bold"
+                            android:textSize="35sp"
+                            android:autoSizeTextType="uniform"
+                            android:autoSizeStepGranularity="1sp"
+                            android:autoSizeMinTextSize="23sp"
+                            android:text="28%"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="3"
+                        android:orientation="vertical"
+                        >
+                        <TextView
+                            android:id="@+id/current"
+                            android:textColor="@color/theme0_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="4"
+                            android:gravity="end"
+                            android:autoSizeTextType="uniform"
+                            android:autoSizeStepGranularity="1sp"
+                            android:autoSizeMaxTextSize="15sp"
+                            android:autoSizeMinTextSize="13sp"
+                            android:paddingBottom="1dp"
+                            android:paddingRight="2dp"
+                            android:text="화"/>
+
+                        <ProgressBar style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            android:id="@+id/progress"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="3"
+                            android:max="100"
+                            android:progress="28"
+                            android:progressDrawable="@drawable/progressbar_theme"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <ImageButton style="@style/imgbt"
+                        android:id="@+id/buttonUP"
+                        android:layout_marginBottom="5dp"
+                        android:background="@drawable/imgbt_up"
+                        />
+                    <ImageButton style="@style/imgbt"
+                        android:id="@+id/buttonDOWN"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/imgbt_down"
+                        />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView style="@style/titleStyle"
+                android:text="@string/setTheme"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                style="@style/recyclerView"
+                android:id="@+id/recyclerView"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView style="@style/titleStyle"
+                    android:text="@string/title"/>
+                <EditText
+                    android:id="@+id/title_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="10dp"
+                    android:hint="@string/hint"/>
+            </LinearLayout>
+
+            <TextView style="@style/titleStyle"
+                android:text="@string/start"/>
+
+            <LinearLayout style="@style/count_input_title">
+                <EditText style="@style/NumberText"
+                    android:id="@+id/start_input"/>
+                <EditText style="@style/Unit_edit"
+                    android:id="@+id/unit"/>
+            </LinearLayout>
+
+            <TextView style="@style/titleStyle"
+                android:text="@string/current"/>
+
+            <LinearLayout style="@style/count_input_title">
+                <EditText style="@style/NumberText"
+                    android:id="@+id/current_input"/>
+                <TextView style="@style/Unit"
+                    android:id="@+id/unit1"
+                    android:layout_marginLeft="3dp"/>
+            </LinearLayout>
+
+            <TextView style="@style/titleStyle"
+                android:text="@string/finish"/>
+
+            <LinearLayout style="@style/count_input_title">
+                <EditText style="@style/NumberText"
+                    android:id="@+id/finish_input"/>
+                <TextView style="@style/Unit"
+                    android:id="@+id/unit2"
+                    android:layout_marginLeft="3dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button style="@style/submitButton"
+        android:id="@+id/submit"/>
+</LinearLayout>

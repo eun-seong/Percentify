@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="RED">#FF0000</color>
+    <color name="GREEN">#00FF00</color>
+    <color name="BLUE">#0000FF</color>
+    <color name="background">#F8F8F8</color>
+    <color name="progressbar">#27538C</color>
+    <color name="progressbackground">#F2F2F2</color>
+    <color name="prev_bt">@color/theme0_background</color>
+
+<!--    &lt;!&ndash;////////////////////////  theme color  ////////////////////////&ndash;&gt;-->
+<!--    &lt;!&ndash;  background  &ndash;&gt;-->
+<!--    <color name="theme0_background">#FFFFFF</color>-->
+<!--    <color name="theme1_background">#F2F2F2</color>-->
+<!--    <color name="theme2_background">#F2F2F2</color>-->
+<!--    <color name="theme3_background">#F2E4D5</color>-->
+<!--    <color name="theme4_background">#F2E4D5</color>-->
+<!--    <color name="theme5_background">#F2EBEB</color>-->
+<!--    <color name="theme6_background">#F7C9C8</color>-->
+<!--    <color name="theme7_background">#BADEF2</color>-->
+<!--    <color name="theme8_background">#014959</color>-->
+<!--    <color name="theme9_background">#2F3540</color>-->
+<!--    <color name="theme10_background">#D2B887</color>-->
+<!--    <color name="theme11_background">#3B2C30</color>-->
+<!--    <color name="theme12_background">#F7F1D5</color>-->
+<!--    <color name="theme13_background">#FFFFFF</color>-->
+
+<!--    &lt;!&ndash;  text  &ndash;&gt;-->
+<!--    <color name="theme0_text">#000000</color>-->
+<!--    <color name="theme1_text">#2F3540</color>-->
+<!--    <color name="theme2_text">#5A402A</color>-->
+<!--    <color name="theme3_text">#733A2D</color>-->
+<!--    <color name="theme4_text">#BF4E59</color>-->
+<!--    <color name="theme5_text">#A61823</color>-->
+<!--    <color name="theme6_text">#768EBF</color>-->
+<!--    <color name="theme7_text">#012340</color>-->
+<!--    <color name="theme8_text">#DAC3B1</color>-->
+<!--    <color name="theme9_text">#A3B4BF</color>-->
+<!--    <color name="theme10_text">#221E14</color>-->
+<!--    <color name="theme11_text">#F0C749</color>-->
+<!--    <color name="theme12_text">#06CF5E</color>-->
+<!--    <color name="theme13_text">#E0022C</color>-->
+
+<!--    &lt;!&ndash;  second progressbar_theme  &ndash;&gt;-->
+<!--    <color name="theme0_second">#CCCCCC</color>-->
+<!--    <color name="theme1_second">#BBCDD9</color>-->
+<!--    <color name="theme2_second">#A3B4BF</color>-->
+<!--    <color name="theme3_second">#D9B4A7</color>-->
+<!--    <color name="theme4_second">#F2F2F2</color>-->
+<!--    <color name="theme5_second">#DA969B</color>-->
+<!--    <color name="theme6_second">#F2F2F2</color>-->
+<!--    <color name="theme7_second">#5B7BA7</color>-->
+<!--    <color name="theme8_second">#F2F2F2</color>-->
+<!--    <color name="theme9_second">#F2F2F2</color>-->
+<!--    <color name="theme10_second">#795C35</color>-->
+<!--    <color name="theme11_second">#9D8B84</color>-->
+<!--    <color name="theme12_second">#FFFFFF</color>-->
+<!--    <color name="theme13_second">#0052A4</color>-->
+
+<!--    <color name="theme13_progress">#000000</color>-->
+
+
+
+
+    <!--////////////////////////  _theme color  ////////////////////////-->
+    <!--  background  -->
+    <color name="theme0_background">#E6E6E6</color>
+    <color name="theme1_background">#D97F7F</color>
+    <color name="theme2_background">#D99E33</color>
+    <color name="theme3_background">#D9AB9A</color>
+    <color name="theme4_background">#5B7BA7</color>
+    <color name="theme5_background">#353941</color>
+    <color name="theme6_background">#735650</color>
+    <color name="theme7_background">#F7C9C8</color>
+    <color name="theme8_background">#A3B4BF</color>
+
+    <!--  text  -->
+    <color name="theme0_text">#012340</color>
+    <color name="theme1_text">#012340</color>
+    <color name="theme2_text">#012340</color>
+    <color name="theme3_text">#012340</color>
+    <color name="theme4_text">#012340</color>
+    <color name="theme5_text">#F2F2F2</color>
+    <color name="theme6_text">#F2F2F2</color>
+    <color name="theme7_text">#A61823</color>
+    <color name="theme8_text">#3B2C30</color>
+
+</resources>

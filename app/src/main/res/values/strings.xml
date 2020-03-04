@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Percentify</string>
+    <string name="admob_app_id">ca-app-pub-7095917668541914~8329307500</string>
+    <string name="banner_ad_unit_id">ca-app-pub-7095917668541914/7016225834</string>
+    <string name="banner_ad_unit_id_for_test">ca-app-pub-3940256099942544/6300978111</string>
+    
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="configure">Configure</string>
+    <string name="today">오늘</string>
+    <string name="year">올 해</string>
+    <string name="month">이번 달</string>
+    <string name="week">이번 주</string>
+    <string name="setTheme">테마 지정</string>
+    <string name="start">시작</string>
+    <string name="finish">끝</string>
+    <string name="current">현재</string>
+    <string name="range">범위</string>
+    <string name="title">제목</string>
+    <string name="percent">59%</string>
+    <string name="hint">입력</string>
+    <string name="submit">완료</string>
+    <string name="setRange">범위 선택</string>
+</resources>
