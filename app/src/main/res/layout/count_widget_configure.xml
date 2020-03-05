@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
+    android:paddingBottom="20dp"
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
     android:windowTranslucentStatus="true"
     android:background="@color/background"
     >
@@ -13,7 +15,6 @@
         ads:adUnitId="@string/banner_ad_unit_id_for_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         />
 
     <ScrollView
@@ -24,6 +25,7 @@
         android:gravity ="center"
         android:fillViewport="true"
         android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
         >
         <LinearLayout
             android:orientation="vertical"
@@ -66,7 +68,7 @@
                                 android:autoSizeMaxTextSize="15sp"
                                 android:autoSizeMinTextSize="8sp"
                                 android:autoSizeTextType="uniform"
-                                android:text="월요일 - 일요일"/>
+                                android:text="0 page - 100 page"/>
                             <TextView
                                 android:textColor="@color/theme0_text"
                                 android:id="@+id/title"
@@ -76,7 +78,7 @@
                                 android:autoSizeTextType="uniform"
                                 android:autoSizeStepGranularity="1sp"
                                 android:autoSizeMaxTextSize="20sp"
-                                android:text="이번 주"/>
+                                android:text="책 읽기"/>
                         </LinearLayout>
                         <TextView
                             android:textColor="@color/theme0_text"
@@ -113,7 +115,7 @@
                             android:autoSizeMinTextSize="13sp"
                             android:paddingBottom="1dp"
                             android:paddingRight="2dp"
-                            android:text="화"/>
+                            android:text="28 page"/>
 
                         <ProgressBar style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:id="@+id/progress"

@@ -24,18 +24,6 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.eun.percentify.CountWidget">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.example.dday.ACTION_BUTTON_UP"/>
-                <action android:name="com.example.dday.ACTION_BUTTON_DOWN"/>
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/count_widget_info" />
-        </receiver>
-
         <activity android:name="com.eun.percentify.CountWidgetConfigureActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -57,6 +45,19 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_info" />
         </receiver>
+
+        <receiver android:name="com.eun.percentify.CountWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.example.dday.ACTION_BUTTON_UP"/>
+                <action android:name="com.example.dday.ACTION_BUTTON_DOWN"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/count_widget_info" />
+        </receiver>
+
     </application>
 
 </manifest>
