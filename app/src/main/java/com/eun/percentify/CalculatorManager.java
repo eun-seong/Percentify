@@ -20,7 +20,18 @@ public class CalculatorManager {
     private static double dayNum = Integer.parseInt(new SimpleDateFormat("u", Locale.getDefault()).format(currentTime));    // 일주일 중 몇번 째 요일 1-7
     private static double yearNum = Integer.parseInt(new SimpleDateFormat("D", Locale.getDefault()).format(currentTime));   // 일년 중 몇번 째 일
 
+    public static void init(){
+        Date currentTime = Calendar.getInstance().getTime();
+        double year = Integer.parseInt(new SimpleDateFormat("y",Locale.getDefault()).format(currentTime));       // 년
+        double month = Integer.parseInt(new SimpleDateFormat("M", Locale.getDefault()).format(currentTime));     // 달
+        double day = Integer.parseInt(new SimpleDateFormat("d", Locale.getDefault()).format(currentTime));       // 일
+        double hour = Integer.parseInt(new SimpleDateFormat("HH", Locale.getDefault()).format(currentTime));     // 0-24
+        double dayNum = Integer.parseInt(new SimpleDateFormat("u", Locale.getDefault()).format(currentTime));    // 일주일 중 몇번 째 요일 1-7
+        double yearNum = Integer.parseInt(new SimpleDateFormat("D", Locale.getDefault()).format(currentTime));   // 일년 중 몇번 째 일
+    }
+
     public static int getToday(){
+        init();
         hour = Integer.parseInt(new SimpleDateFormat("HH", Locale.getDefault()).format(currentTime));
         int percent = (int) Math.round((hour*100)/24);
         Log.d(TAG, "getToday: percent = "+percent);
@@ -28,12 +39,14 @@ public class CalculatorManager {
         return percent;
     }
     public static int getWeek(){
+        init();
         int percent = (int)Math.round(((hour+(dayNum*24))/168)*100);
         Log.d(TAG, "getWeek: percent = " + percent);
 
         return percent;
     }
     public static int getMonth(){
+        init();
         int _hour = (int)((day-1)*24 + hour);
         gc = new GregorianCalendar();
 
@@ -46,6 +59,7 @@ public class CalculatorManager {
         return percent;
     }
     public static int getYear(){
+        init();
         int yearSum = 365;
         gc = new GregorianCalendar();
         if(gc.isLeapYear((int)year)) yearSum+=1;
@@ -56,27 +70,33 @@ public class CalculatorManager {
         return percent;
     }
     public static int getMonthEnd(){
+        init();
         if(gc.isLeapYear((int)year)) monthDays[1]+=1;
         return (int)monthDays[(int)month-1];
     }
 
     public static String getCurrentYear(){
+        init();
         return Integer.toString((int)year);
     }
 
     public static String getCurrentMonth(){
+        init();
         return Integer.toString((int)month);
     }
 
     public static String getCurrentDay(){
+        init();
         return Integer.toString((int)day);
     }
 
     public static String getCurrentHour(){
+        init();
         return Integer.toString((int)hour);
     }
 
     public static String getCurrentDaynum(){
+        init();
         String dayString=new String();
         switch ((int)dayNum){
             case 1:
@@ -105,6 +125,7 @@ public class CalculatorManager {
     }
 
     public static String getCurrentYearnum(){
+        init();
         return Integer.toString((int)yearNum);
     }
 }

@@ -183,8 +183,8 @@ public class DefaultWidgetConfigureActivity extends Activity implements Recycler
                         return;
                 }
 
-                SetProgressManager.setTheme(mContext, views, mPosition);
                 PreferenceManager.setInt(mContext,appWidgetId+"theme", mPosition);
+                SetProgressManager.setTheme(mContext, views, mPosition);
                 finishConfigure();
             }
         });

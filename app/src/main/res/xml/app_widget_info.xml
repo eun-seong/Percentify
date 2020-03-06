@@ -9,4 +9,4 @@
     android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen"
     android:configure="com.eun.percentify.DefaultWidgetConfigureActivity">
-</appwidget-provider>
+    </appwidget-provider>

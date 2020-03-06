@@ -19,7 +19,6 @@ public class DefaultWidget extends AppWidgetProvider {
         String type = PreferenceManager.getString(context, Integer.toString(appWidgetId));
         views = new RemoteViews(context.getPackageName(), R.layout.default_widget);
 
-
         switch (type){
             case "today":
                 updateToday();

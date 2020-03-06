@@ -2,8 +2,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/widget_theme0"
-    android:padding="11dp"
-    android:layout_margin="8dp"
+    android:padding="8dp"
+    android:layout_margin="3dp"
     android:orientation="vertical"
     android:gravity="center"
     android:id="@+id/myWidget">
@@ -21,22 +21,16 @@
             <TextView
                 android:id="@+id/range"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="4"
+                android:layout_height="14dp"
                 android:layout_marginBottom="2dp"
-                android:autoSizeStepGranularity="1sp"
-                android:autoSizeMaxTextSize="15sp"
-                android:autoSizeMinTextSize="8sp"
-                android:autoSizeTextType="uniform"
+                android:textSize="11sp"
                 android:text="월요일 - 일요일"/>
             <TextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="7"
-                android:autoSizeTextType="uniform"
-                android:autoSizeStepGranularity="1sp"
-                android:autoSizeMaxTextSize="20sp"
+                android:layout_weight="1"
+                android:textSize="18sp"
                 android:text="이번 주"/>
         </LinearLayout>
         <TextView
@@ -47,10 +41,7 @@
             android:paddingStart="2dp"
             android:gravity="end"
             android:textStyle="bold"
-            android:textSize="35sp"
-            android:autoSizeTextType="uniform"
-            android:autoSizeStepGranularity="1sp"
-            android:autoSizeMinTextSize="23sp"
+            android:textSize="30sp"
             android:text="28%"/>
     </LinearLayout>
 
@@ -66,11 +57,7 @@
             android:layout_height="0dp"
             android:layout_weight="4"
             android:gravity="end"
-            android:autoSizeTextType="uniform"
-            android:autoSizeStepGranularity="1sp"
-            android:autoSizeMaxTextSize="15sp"
-            android:autoSizeMinTextSize="13sp"
-            android:paddingBottom="1dp"
+            android:textSize="13sp"
             android:paddingRight="2dp"
             android:text="화"/>
 
