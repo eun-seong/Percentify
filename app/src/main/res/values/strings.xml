@@ -21,4 +21,14 @@
     <string name="hint">입력</string>
     <string name="submit">완료</string>
     <string name="setRange">범위 선택</string>
+
+    <string name="DATABASE_NAME">Widget</string>
+    <string name="TABLE_NAME">Widgets</string>
+    <string name="_ID">_id</string>
+    <string name="COLUMN_NAME_TITLE">type</string>
+    <string name="COLUMN_NAME_THEME">theme</string>
+    <string name="COLUMN_NAME_UNIT">unit</string>
+    <string name="COLUMN_NAME_START">start</string>
+    <string name="COLUMN_NAME_CURRENT">current</string>
+    <string name="COLUMN_NAME_FINISH">finish</string>
 </resources>

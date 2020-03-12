@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ItemViewHolder> {
-    private final static String TAG = "RecyclerAdapter";
+    private final static String TAG = "@@@@RecyclerAdapter";
     private ArrayList<Integer> listData;
     private Context mContext;
 

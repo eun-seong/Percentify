@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class CalculatorManager {
-    private static final String TAG = "CalculatorManager";
+    private static final String TAG = "@@@@CalculatorManager";
     private static Date currentTime = Calendar.getInstance().getTime();
     private static GregorianCalendar gc;
     private static double[] monthDays = { 31,28,31,30,31,30,31,31,30,31,30,31};
@@ -22,12 +22,13 @@ public class CalculatorManager {
 
     public static void init(){
         Date currentTime = Calendar.getInstance().getTime();
-        double year = Integer.parseInt(new SimpleDateFormat("y",Locale.getDefault()).format(currentTime));       // 년
-        double month = Integer.parseInt(new SimpleDateFormat("M", Locale.getDefault()).format(currentTime));     // 달
-        double day = Integer.parseInt(new SimpleDateFormat("d", Locale.getDefault()).format(currentTime));       // 일
-        double hour = Integer.parseInt(new SimpleDateFormat("HH", Locale.getDefault()).format(currentTime));     // 0-24
-        double dayNum = Integer.parseInt(new SimpleDateFormat("u", Locale.getDefault()).format(currentTime));    // 일주일 중 몇번 째 요일 1-7
-        double yearNum = Integer.parseInt(new SimpleDateFormat("D", Locale.getDefault()).format(currentTime));   // 일년 중 몇번 째 일
+        gc = new GregorianCalendar();
+        year = Integer.parseInt(new SimpleDateFormat("y",Locale.getDefault()).format(currentTime));       // 년
+        month = Integer.parseInt(new SimpleDateFormat("M", Locale.getDefault()).format(currentTime));     // 달
+        day = Integer.parseInt(new SimpleDateFormat("d", Locale.getDefault()).format(currentTime));       // 일
+        hour = Integer.parseInt(new SimpleDateFormat("HH", Locale.getDefault()).format(currentTime));     // 0-24
+        dayNum = Integer.parseInt(new SimpleDateFormat("u", Locale.getDefault()).format(currentTime));    // 일주일 중 몇번 째 요일 1-7
+        yearNum = Integer.parseInt(new SimpleDateFormat("D", Locale.getDefault()).format(currentTime));   // 일년 중 몇번 째 일
     }
 
     public static int getToday(){

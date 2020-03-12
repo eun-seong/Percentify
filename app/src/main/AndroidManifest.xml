@@ -23,6 +23,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.eun.percentify.EmptyActivity">
+
+        </activity>
 
         <activity android:name="com.eun.percentify.CountWidgetConfigureActivity">
             <intent-filter>

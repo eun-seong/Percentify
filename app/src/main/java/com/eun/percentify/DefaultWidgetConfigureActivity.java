@@ -2,8 +2,12 @@ package com.eun.percentify;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,17 +25,19 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DefaultWidgetConfigureActivity extends Activity implements RecyclerAdapter.OnListItemSelectedInterface {
-    private static String TAG = "DefaultWidgetConfigureActivity";
+    private static String TAG = "@@@@DefaultWidgetConfigureActivity";
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private int percent;
+    private String unit;
+    private String mType;
     private Context mContext;
     private RemoteViews views;
     private AppWidgetManager appWidgetManager;
-    private RadioButton today, week, month, year;
     private AdView mAdView;
 
     // RecyclerView
@@ -39,6 +45,9 @@ public class DefaultWidgetConfigureActivity extends Activity implements Recycler
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+
+    //    private WidgetDatabaseManager databaseManager;
+    private SQLiteDatabase sqliteDB = null ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +70,55 @@ public class DefaultWidgetConfigureActivity extends Activity implements Recycler
         if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) finish();
 
         appWidgetManager = AppWidgetManager.getInstance(this);
+
+        /************ DB 설정 ************/
+        String filename = "Widgets.db";
+        try {
+            File databseFile = getDatabasePath(filename);
+            sqliteDB = SQLiteDatabase.openOrCreateDatabase(databseFile, null);
+//            sqliteDB = SQLiteDatabase.openOrCreateDatabase("Widgets.db", null) ;
+        } catch (SQLiteException e) {
+            String databasePath = getFilesDir().getPath()+"/"+filename;
+            File databaseFile = new File(databasePath);
+            sqliteDB = SQLiteDatabase.openOrCreateDatabase(databaseFile, null);
+
+            e.printStackTrace() ;
+        }
+
+        String sqlCreateTbl = "CREATE TABLE IF NOT EXISTS " + getString(R.string.TABLE_NAME) +
+                " (" + getString(R.string._ID)+" INTEGER PRIMARY KEY," +
+                getString(R.string.COLUMN_NAME_TITLE) +" TEXT, " +
+                getString(R.string.COLUMN_NAME_THEME) +" INTEGER, " +
+                getString(R.string.COLUMN_NAME_UNIT) +" TEXT, " +
+                getString(R.string.COLUMN_NAME_START) +" INTEGER, " +
+                getString(R.string.COLUMN_NAME_CURRENT) +" INTEGER, " +
+                getString(R.string.COLUMN_NAME_FINISH) +" INTEGER);" ;
+
+        sqliteDB.execSQL(sqlCreateTbl) ;
+
+        String sqlSelect = "SELECT * FROM " + getString(R.string.TABLE_NAME) +
+                " WHERE _ID=" + appWidgetId;
+
+        Cursor cursor = sqliteDB.rawQuery(sqlSelect, null);
+        if(cursor.moveToNext()){
+            mType = cursor.getString(1);
+            mPosition = cursor.getInt(2);
+            switch (mType){
+                case "today":
+                    setButtonColor(R.id.rg_btn1);
+                    break;
+                case "week":
+                    setButtonColor(R.id.rg_btn2);
+                    break;
+                case "month":
+                    setButtonColor(R.id.rg_btn3);
+                    break;
+                case "year":
+                    setButtonColor(R.id.rg_btn4);
+                    break;
+            }
+            SetWidgetPreview.setWidgetTheme(this, mPosition);
+        }
 
 
         /************ 광고 설정 ************/
@@ -113,10 +171,6 @@ public class DefaultWidgetConfigureActivity extends Activity implements Recycler
 
         /************ 액티비티 설정 ************/
         views = new RemoteViews(this.getPackageName(), R.layout.default_widget);
-        today = findViewById(R.id.rg_btn1);
-        week = findViewById(R.id.rg_btn2);
-        month = findViewById(R.id.rg_btn3);
-        year = findViewById(R.id.rg_btn4);
 
         RadioGroup radioGroup = findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -124,36 +178,24 @@ public class DefaultWidgetConfigureActivity extends Activity implements Recycler
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId){
                     case R.id.rg_btn1:
-                        today.setBackgroundResource(R.drawable.submit_bt_pressed);
-                        week.setBackgroundResource(R.drawable.preview_bt_round);
-                        month.setBackgroundResource(R.drawable.preview_bt_round);
-                        year.setBackgroundResource(R.drawable.preview_bt_round);
+                        setButtonColor(R.id.rg_btn1);
+                        mType = "today";
                         percent = CalculatorManager.getToday();
-                        PreferenceManager.setString(mContext,Integer.toString(appWidgetId), "today");
                         break;
                     case R.id.rg_btn2:
-                        today.setBackgroundResource(R.drawable.preview_bt_round);
-                        week.setBackgroundResource(R.drawable.submit_bt_pressed);
-                        month.setBackgroundResource(R.drawable.preview_bt_round);
-                        year.setBackgroundResource(R.drawable.preview_bt_round);
+                        setButtonColor(R.id.rg_btn2);
+                        mType = "week";
                         percent = CalculatorManager.getWeek();
-                        PreferenceManager.setString(mContext,Integer.toString(appWidgetId), "week");
                         break;
                     case R.id.rg_btn3:
-                        today.setBackgroundResource(R.drawable.preview_bt_round);
-                        week.setBackgroundResource(R.drawable.preview_bt_round);
-                        month.setBackgroundResource(R.drawable.submit_bt_pressed);
-                        year.setBackgroundResource(R.drawable.preview_bt_round);
+                        setButtonColor(R.id.rg_btn3);
+                        mType = "month";
                         percent = CalculatorManager.getMonth();
-                        PreferenceManager.setString(mContext,Integer.toString(appWidgetId), "month");
                         break;
                     case R.id.rg_btn4:
-                        today.setBackgroundResource(R.drawable.preview_bt_round);
-                        week.setBackgroundResource(R.drawable.preview_bt_round);
-                        month.setBackgroundResource(R.drawable.preview_bt_round);
-                        year.setBackgroundResource(R.drawable.submit_bt_pressed);
+                        setButtonColor(R.id.rg_btn4);
+                        mType = "year";
                         percent = CalculatorManager.getYear();
-                        PreferenceManager.setString(mContext,Integer.toString(appWidgetId), "year");
                         break;
                 }
             }
@@ -163,19 +205,21 @@ public class DefaultWidgetConfigureActivity extends Activity implements Recycler
         bt_submit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                String type = PreferenceManager.getString(mContext, Integer.toString(appWidgetId));
-
-                switch (type){
+                switch (mType){
                     case "today":
+                        unit = "시";
                         SetProgressManager.setProgress(views, percent, "오늘", "0시 - 24시", CalculatorManager.getCurrentHour()+"시");
                         break;
                     case "week":
+                        unit = "요일";
                         SetProgressManager.setProgress(views, percent, "이번 주", "월요일 - 일요일", CalculatorManager.getCurrentDaynum()+ "요일");
                         break;
                     case "month":
+                        unit = "일";
                         SetProgressManager.setProgress(views, percent, "이번 달", "1일 - "+ CalculatorManager.getMonthEnd()+"일", CalculatorManager.getCurrentDay()+ "일");
                         break;
                     case "year":
+                        unit = "월";
                         SetProgressManager.setProgress(views, percent, "올 해", "1월 - 12월", CalculatorManager.getCurrentMonth()+ "월");
                         break;
                     default:
@@ -183,13 +227,32 @@ public class DefaultWidgetConfigureActivity extends Activity implements Recycler
                         return;
                 }
 
-                PreferenceManager.setInt(mContext,appWidgetId+"theme", mPosition);
+                String sqlUpdate = "INSERT OR REPLACE INTO "+ getString(R.string.TABLE_NAME) + " ("+
+                        getString(R.string._ID)+", "+
+                        getString(R.string.COLUMN_NAME_TITLE) +", "+
+                        getString(R.string.COLUMN_NAME_THEME) +", "+
+                        getString(R.string.COLUMN_NAME_UNIT) +") VALUES (" +
+                        appWidgetId +", '"+
+                        mType +"', "+
+                        mPosition +", '"+
+                        unit +"')";
+                sqliteDB.execSQL(sqlUpdate) ;
+
                 SetProgressManager.setTheme(mContext, views, mPosition);
                 finishConfigure();
             }
         });
 
         setRecyclerView();
+    }
+
+    void setButtonColor(int buttonId){
+        findViewById(R.id.rg_btn1).setBackgroundResource(R.drawable.preview_bt_round);
+        findViewById(R.id.rg_btn2).setBackgroundResource(R.drawable.preview_bt_round);
+        findViewById(R.id.rg_btn3).setBackgroundResource(R.drawable.preview_bt_round);
+        findViewById(R.id.rg_btn4).setBackgroundResource(R.drawable.preview_bt_round);
+
+        findViewById(buttonId).setBackgroundResource(R.drawable.submit_bt_pressed);
     }
 
     /******************** RecyclerView ************************/

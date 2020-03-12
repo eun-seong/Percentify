@@ -5,6 +5,9 @@ import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,6 +27,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -31,7 +35,7 @@ import java.util.Arrays;
  * The configuration screen for the {@link CountWidget CountWidget} AppWidget.
  */
 public class CountWidgetConfigureActivity extends Activity implements RecyclerAdapter.OnListItemSelectedInterface {
-    private static String TAG = "CountWidgetConfigureActivity";
+    private static String TAG = "@@@@CountWidgetConfigureActivity";
     private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
     private static final String ACTION_BUTTON_UP = "com.example.dday.ACTION_BUTTON_UP";
     private static final String ACTION_BUTTON_DOWN = "com.example.dday.ACTION_BUTTON_DOWN";
@@ -41,7 +45,7 @@ public class CountWidgetConfigureActivity extends Activity implements RecyclerAd
     private AdView mAdView;
 
     private EditText title, start_input, unit, current_input, finish_input;
-    private double start = -1, finish= -1, current =-1;
+    private int start = -1, finish= -1, current =-1;
     private int percent= -1;
 
     // RecyclerView
@@ -50,12 +54,20 @@ public class CountWidgetConfigureActivity extends Activity implements RecyclerAd
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
+    private SQLiteDatabase sqliteDB = null ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.count_widget_configure);
         setResult(RESULT_CANCELED);
         mContext = this;
+
+        title = findViewById(R.id.title_input);
+        start_input = findViewById(R.id.start_input);
+        current_input = findViewById(R.id.current_input);
+        finish_input = findViewById(R.id.finish_input);
+        unit = findViewById(R.id.unit);
 
         /************ 위젯 설정 ************/
         // get a widget ID
@@ -72,8 +84,52 @@ public class CountWidgetConfigureActivity extends Activity implements RecyclerAd
         appWidgetManager = AppWidgetManager.getInstance(this);
         views = new RemoteViews(this.getPackageName(), R.layout.count_widget);
 
+        /************ DB 설정 ************/
+        String filename = "Widgets.db";
+        try {
+            File databseFile = getDatabasePath(filename);
+            sqliteDB = SQLiteDatabase.openOrCreateDatabase(databseFile, null);
+//            sqliteDB = SQLiteDatabase.openOrCreateDatabase("Widgets.db", null) ;
+        } catch (SQLiteException e) {
+            String databasePath = getFilesDir().getPath()+"/"+filename;
+            File databaseFile = new File(databasePath);
+            sqliteDB = SQLiteDatabase.openOrCreateDatabase(databaseFile, null);
+
+            e.printStackTrace() ;
+        }
+
+        String sqlCreateTbl = "CREATE TABLE IF NOT EXISTS " + getString(R.string.TABLE_NAME) +
+                " (" + getString(R.string._ID)+" INTEGER PRIMARY KEY," +
+                getString(R.string.COLUMN_NAME_TITLE) +" TEXT, " +
+                getString(R.string.COLUMN_NAME_THEME) +" INTEGER, " +
+                getString(R.string.COLUMN_NAME_UNIT) +" TEXT, " +
+                getString(R.string.COLUMN_NAME_START) +" INTEGER, " +
+                getString(R.string.COLUMN_NAME_CURRENT) +" INTEGER, " +
+                getString(R.string.COLUMN_NAME_FINISH) +" INTEGER);" ;
+
+        sqliteDB.execSQL(sqlCreateTbl) ;
 
 
+        String sqlSelect = "SELECT * FROM " + getString(R.string.TABLE_NAME) +
+                " WHERE _ID=" + appWidgetId;
+
+        Cursor cursor = sqliteDB.rawQuery(sqlSelect, null);
+        if(cursor.moveToNext()) {
+            String type = cursor.getString(1);
+            mPosition = cursor.getInt(2);
+            String Unit = cursor.getString(3);
+            start = cursor.getInt(4);
+            current = cursor.getInt(5);
+            finish = cursor.getInt(6);
+            title.setText(type);
+            SetWidgetPreview.setWidgetTheme(this, mPosition);
+            unit.setText(Unit);
+            start_input.setText(Integer.toString(start));
+            current_input.setText(Integer.toString(current));
+            finish_input.setText(Integer.toString(finish));
+        }
+
+        /************ 광고 설정 ************/
         MobileAds.initialize(this, getString(R.string.admob_app_id));
 
         mAdView = findViewById(R.id.adView);
@@ -119,12 +175,6 @@ public class CountWidgetConfigureActivity extends Activity implements RecyclerAd
             }
         });
         /************ 버튼 ************/
-        title = findViewById(R.id.title_input);
-        start_input = findViewById(R.id.start_input);
-        current_input = findViewById(R.id.current_input);
-        finish_input = findViewById(R.id.finish_input);
-
-        unit = findViewById(R.id.unit);
         unit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -151,9 +201,9 @@ public class CountWidgetConfigureActivity extends Activity implements RecyclerAd
                 try {
                     String Title = title.getText().toString();
                     String Unit = unit.getText().toString();
-                    int start = Integer.parseInt(start_input.getText().toString());
-                    int current = Integer.parseInt(current_input.getText().toString());
-                    int finish = Integer.parseInt(finish_input.getText().toString());
+                    start = Integer.parseInt(start_input.getText().toString());
+                    current = Integer.parseInt(current_input.getText().toString());
+                    finish = Integer.parseInt(finish_input.getText().toString());
 
                     if(Title.equals("") || Unit.equals("") ){
                         Toast.makeText(mContext,"입력 값을 다시 확인해 주세요", Toast.LENGTH_SHORT).show();
@@ -172,15 +222,25 @@ public class CountWidgetConfigureActivity extends Activity implements RecyclerAd
                     float currentInput = (float)current;
                     float finishInput = (float)finish;
 
-                    int percent = Math.round((currentInput-startInput)/(finishInput-startInput)*100);
+                    percent = Math.round((currentInput-startInput)/(finishInput-startInput)*100);
                     String range = ""+start+" "+Unit+" - "+finish+" "+Unit;
 
-                    PreferenceManager.setString(mContext, appWidgetId+"title",Title);
-                    PreferenceManager.setString(mContext, appWidgetId+"unit",Unit);
-                    PreferenceManager.setInt(mContext, appWidgetId+"start",start);
-                    PreferenceManager.setInt(mContext, appWidgetId+"current",current);
-                    PreferenceManager.setInt(mContext, appWidgetId+"finish",finish);
-                    PreferenceManager.setInt(mContext, appWidgetId+"theme", mPosition);
+                    String sqlUpdate = "INSERT OR REPLACE INTO "+ getString(R.string.TABLE_NAME) + "("+
+                            getString(R.string._ID)+", "+
+                            getString(R.string.COLUMN_NAME_TITLE) +", "+
+                            getString(R.string.COLUMN_NAME_THEME) +", "+
+                            getString(R.string.COLUMN_NAME_UNIT) +", "+
+                            getString(R.string.COLUMN_NAME_START) +", "+
+                            getString(R.string.COLUMN_NAME_CURRENT) +", "+
+                            getString(R.string.COLUMN_NAME_FINISH) +") VALUES (" +
+                            appWidgetId +", '"+
+                            Title +"', "+
+                            mPosition +", '"+
+                            Unit +"', "+
+                            start +", "+
+                            current +", "+
+                            finish +")";
+                    sqliteDB.execSQL(sqlUpdate) ;
 
                     SetProgressManager.setProgress(views, percent, Title, range, current+ " "+Unit);
                     SetProgressManager.setTheme(mContext, views, mPosition);
@@ -188,6 +248,7 @@ public class CountWidgetConfigureActivity extends Activity implements RecyclerAd
                     finishConfigure();
                 } catch (Exception e){
                     Toast.makeText(mContext,"입력 값을 다시 확인해 주세요", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
                 }
 
             }

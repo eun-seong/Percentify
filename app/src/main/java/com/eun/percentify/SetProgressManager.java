@@ -7,7 +7,7 @@ import android.widget.RemoteViews;
 import androidx.core.content.ContextCompat;
 
 public class SetProgressManager {
-    private final static String TAG = "SetProgressManager";
+    private final static String TAG = "@@@@SetProgressManager";
 
     public static void setProgress(RemoteViews views, int percent, String title, String range, String current){
         views.setProgressBar(R.id.progress,100,percent, false);

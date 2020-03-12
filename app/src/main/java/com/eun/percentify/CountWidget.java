@@ -5,18 +5,32 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.util.Log;
 import android.widget.RemoteViews;
+
+import java.io.File;
 
 /**
  * Implementation of App Widget functionality.
  * App Widget Configuration implemented in {@link CountWidgetConfigureActivity CountWidgetConfigureActivity}
  */
 public class CountWidget extends AppWidgetProvider {
-    private static final String TAG = "DefaultWidget";
+    private static final String TAG = "@@@@DefaultWidget";
     private static final String ACTION_BUTTON_UP = "com.example.dday.ACTION_BUTTON_UP";
     private static final String ACTION_BUTTON_DOWN = "com.example.dday.ACTION_BUTTON_DOWN";
     private static RemoteViews views;
+    private String Title;
+    private int mPosition;
+    private String unit;
+    private int start;
+    private int current;
+    private int finish;
+    private Cursor cursor;
+    String filename = "Widgets.db";
 
     public void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         Log.d(TAG, "----------------------updateAppWidget()---------------------- ");
@@ -24,12 +38,30 @@ public class CountWidget extends AppWidgetProvider {
         /********************** UI Update **********************/
         views = new RemoteViews(context.getPackageName(), R.layout.count_widget);
 
-        String Title    = PreferenceManager.getString(context, appWidgetId+"title");
-        String unit     = PreferenceManager.getString(context, appWidgetId+"unit");
-        int start       = PreferenceManager.getInt(context, appWidgetId+"start");
-        int current     = PreferenceManager.getInt(context, appWidgetId+"current");
-        int finish      = PreferenceManager.getInt(context, appWidgetId+"finish");
-        int mPosition = PreferenceManager.getInt(context,appWidgetId+"theme");
+        SQLiteDatabase sqliteDB = null;
+        try {
+            File databseFile = context.getDatabasePath(filename);
+            sqliteDB = SQLiteDatabase.openOrCreateDatabase(databseFile, null);
+
+            String sqlSelect = "SELECT * FROM " + context.getString(R.string.TABLE_NAME) +
+                    " WHERE _ID=" + appWidgetId;
+
+            cursor = sqliteDB.rawQuery(sqlSelect, null);
+            cursor.moveToNext();
+
+            Title = cursor.getString(1);
+            mPosition = cursor.getInt(2);
+            unit = cursor.getString(3);
+            start = cursor.getInt(4);
+            current = cursor.getInt(5);
+            finish = cursor.getInt(6);
+
+        } catch (Exception e){
+            e.printStackTrace();
+            String databasePath = context.getFilesDir().getPath()+"/"+filename;
+            File databaseFile = new File(databasePath);
+            sqliteDB = SQLiteDatabase.openOrCreateDatabase(databaseFile, null);
+        }
 
         int percent = Math.round(((float)(current-start))/(float)(finish-start)*100);
         String range = start+" "+unit+" - "+finish+" "+unit;
@@ -63,20 +95,37 @@ public class CountWidget extends AppWidgetProvider {
 
     public void buttonClicked(Context context, AppWidgetManager appWidgetManager, Intent intent, int val) {
         int appWidgetId =intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
+        views = new RemoteViews(context.getPackageName(), R.layout.count_widget);
+        Log.d(TAG, "buttonClicked: appWidgetId " + appWidgetId);
 
-        String unit = PreferenceManager.getString(context, appWidgetId + "unit");
-        int current   = PreferenceManager.getInt(context, appWidgetId + "current");
-        int start     = PreferenceManager.getInt(context, appWidgetId + "start");
-        int finish    = PreferenceManager.getInt(context, appWidgetId + "finish");
+        /************* SQLite *************/
+        File databseFile = context.getDatabasePath(filename);
+        SQLiteDatabase sqliteDB = SQLiteDatabase.openOrCreateDatabase(databseFile, null);
+
+        String sqlSelect = "SELECT * FROM "+ context.getString(R.string.TABLE_NAME) +
+                " WHERE _id="+ appWidgetId;
+        Cursor cursor = sqliteDB.rawQuery(sqlSelect, null) ;
+
+        cursor.moveToNext();
+        int position = cursor.getInt(2);
+        unit = cursor.getString(3);
+        start = cursor.getInt(4);
+        current = cursor.getInt(5);
+        finish = cursor.getInt(6);
+        /************* SQLite *************/
+
         int changeCurrent = current + val;
         if((current==start && val== -1) || (current==finish && val == 1)) return;
 
-        views = new RemoteViews(context.getPackageName(), R.layout.count_widget);
-
         int percent = Math.round((float)(changeCurrent - start) / (float)(finish - start) * 100);
         SetProgressManager.setCurrent(views, percent, changeCurrent+ " "+unit);
+        SetProgressManager.setTheme(context, views, position);
 
-        PreferenceManager.setInt(context, appWidgetId + "current", changeCurrent);
+        String sqlUpdate = "UPDATE "+ context.getString(R.string.TABLE_NAME) +
+                " SET " + context.getString(R.string.COLUMN_NAME_CURRENT)+"="+changeCurrent+
+                " WHERE _ID="+appWidgetId ;
+
+        sqliteDB.execSQL(sqlUpdate) ;
 
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
@@ -115,12 +164,13 @@ public class CountWidget extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds){
         super.onDeleted(context,appWidgetIds);
         for (int appWidgetId : appWidgetIds) {
-            PreferenceManager.removeKey(context, appWidgetId+"title");
-            PreferenceManager.removeKey(context, appWidgetId+"unit");
-            PreferenceManager.removeKey(context, appWidgetId+"start");
-            PreferenceManager.removeKey(context, appWidgetId+"finish");
-            PreferenceManager.removeKey(context, appWidgetId+"unit");
-            PreferenceManager.removeKey(context, appWidgetId+"theme");
+            File databseFile = context.getDatabasePath(filename);
+            SQLiteDatabase sqliteDB = SQLiteDatabase.openOrCreateDatabase(databseFile, null);
+
+            String sqlDelete = "DELETE FROM "+ context.getString(R.string.TABLE_NAME) +
+                    " WHERE _ID="+ appWidgetId;
+
+            sqliteDB.execSQL(sqlDelete) ;
         }
     }
 

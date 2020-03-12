@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat;
 
 
 public class SetWidgetPreview {
-    private final static String TAG = "SetWidgetPreview";
+    private final static String TAG = "@@@@SetWidgetPreview";
 
     public static void setWidgetTheme(Activity activity, int position){
         Log.d(TAG, "setWidgetTheme: position = "+position);

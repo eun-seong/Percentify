@@ -5,37 +5,69 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import java.io.File;
+import java.util.ArrayList;
+
 public class DefaultWidget extends AppWidgetProvider {
-    private static String TAG = "DefaultWidget";
+    private static String TAG = "@@@@DefaultWidget";
+    String filename = "Widgets.db";
     private RemoteViews views;
-    private Context mContext;
+    private String type;
+    private int mPosition;
+    private String unit;
+    private Cursor cursor;
 
     public void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         Log.d(TAG, "----------------------updateAppWidget()---------------------- ");
 
-        String type = PreferenceManager.getString(context, Integer.toString(appWidgetId));
-        views = new RemoteViews(context.getPackageName(), R.layout.default_widget);
+        SQLiteDatabase sqliteDB = null ;
+        try {
+            File databseFile = context.getDatabasePath(filename);
+            sqliteDB = SQLiteDatabase.openOrCreateDatabase(databseFile, null);
 
-        switch (type){
-            case "today":
-                updateToday();
-                break;
-            case "week":
-                updateWeek();
-                break;
-            case "month":
-                updateMonth();
-                break;
-            case "year":
-                updateYear();
-                break;
+            String sqlSelect = "SELECT * FROM " + context.getString(R.string.TABLE_NAME) +
+                    " WHERE _ID=" + appWidgetId;
+            cursor = sqliteDB.rawQuery(sqlSelect, null);
+            cursor.moveToNext();
+
+            type = cursor.getString(1);
+            mPosition = cursor.getInt(2);
+            unit = cursor.getString(3);
+
+            switch (type){
+                case "today":
+                    updateToday();
+                    break;
+                case "week":
+                    updateWeek();
+                    break;
+                case "month":
+                    updateMonth();
+                    break;
+                case "year":
+                    updateYear();
+                    break;
+            }
+
+            if(mPosition != -1) SetProgressManager.setTheme(context, views, mPosition);
+            Log.d(TAG, "updateAppWidget: SetProgress");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            String databasePath = context.getFilesDir().getPath()+"/"+filename;
+            File databaseFile = new File(databasePath);
+            sqliteDB = SQLiteDatabase.openOrCreateDatabase(databaseFile, null);
         }
 
-        int mPosition = PreferenceManager.getInt(context,appWidgetId+"theme");
-        if(mPosition != -1) SetProgressManager.setTheme(context, views, mPosition);
+        //        String type = PreferenceManager.getString(context, Integer.toString(appWidgetId));
+        views = new RemoteViews(context.getPackageName(), R.layout.default_widget);
 
         Intent intent=new Intent(context, MainActivity.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -77,8 +109,13 @@ public class DefaultWidget extends AppWidgetProvider {
     public void onDeleted(Context context, int[] appWidgetIds){
         Log.d(TAG, "onDeleted: ");
         for (int appWidgetId : appWidgetIds) {
-            PreferenceManager.removeKey(context, Integer.toString(appWidgetId));
-            PreferenceManager.removeKey(context, appWidgetId+"theme");
+            File databseFile = context.getDatabasePath(filename);
+            SQLiteDatabase sqliteDB = SQLiteDatabase.openOrCreateDatabase(databseFile, null);
+
+            String sqlDelete = "DELETE FROM "+ context.getString(R.string.TABLE_NAME) +
+                    " WHERE _ID="+ appWidgetId;
+
+            sqliteDB.execSQL(sqlDelete) ;
         }
     }
 
@@ -91,5 +128,6 @@ public class DefaultWidget extends AppWidgetProvider {
     public void onDisabled(Context context) {
         Log.d(TAG, "onDisabled: ");
     }
+
 }
 
