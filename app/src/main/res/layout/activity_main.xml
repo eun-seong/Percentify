@@ -9,29 +9,25 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     >
-    <ScrollView
+
+    <TextView style="@style/titleStyle"
+        android:textColor="@color/background"
+        android:layout_marginBottom="10dp"
+        android:text="위젯 관리"/>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
         android:layout_weight="1">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
 
-            <TextView style="@style/titleStyle"
-                android:textColor="@color/background"
-                android:layout_marginBottom="10dp"
-                android:text="위젯 관리"/>
+        <androidx.recyclerview.widget.RecyclerView
+            style="@style/recyclerView"
+            android:id="@+id/recyclerView"/>
 
-            <androidx.recyclerview.widget.RecyclerView
-                style="@style/recyclerView"
-                android:id="@+id/recyclerView"/>
-
-        </LinearLayout>
-    </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
@@ -39,7 +35,6 @@
         ads:adUnitId="@string/banner_ad_unit_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:background="@color/progressbar"
         android:backgroundTint="@color/progressbar"
         />

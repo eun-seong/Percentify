@@ -38,7 +38,7 @@ public class CountWidget extends AppWidgetProvider {
             sqliteDB = SQLiteDatabase.openOrCreateDatabase(databseFile, null);
 
             String sqlSelect = "SELECT * FROM " + context.getString(R.string.TABLE_NAME) +
-                    " WHERE _ID=" + appWidgetId;
+                    " WHERE "+context.getString(R.string._ID)+"=" + appWidgetId;
 
             cursor = sqliteDB.rawQuery(sqlSelect, null);
             cursor.moveToNext();
@@ -51,6 +51,9 @@ public class CountWidget extends AppWidgetProvider {
             current = cursor.getInt(6);
             finish = cursor.getInt(7);
 
+            if(mPosition != -1) SetProgressManager.setTheme(context, views, mPosition);
+            SetProgressManager.setProgress(views,mType, mTitle, " "+unit, start, current, finish);
+
         } catch (Exception e){
             e.printStackTrace();
             String databasePath = context.getFilesDir().getPath()+"/"+filename;
@@ -58,8 +61,6 @@ public class CountWidget extends AppWidgetProvider {
             sqliteDB = SQLiteDatabase.openOrCreateDatabase(databaseFile, null);
         }
 
-        if(mPosition != -1) SetProgressManager.setTheme(context, views, mPosition);
-        SetProgressManager.setProgress(views,mType, mTitle, " "+unit, start, current, finish);
 
         /********************** Intent **********************/
         Intent intentUp     = new Intent(context, CountWidget.class);
@@ -95,7 +96,7 @@ public class CountWidget extends AppWidgetProvider {
         SQLiteDatabase sqliteDB = SQLiteDatabase.openOrCreateDatabase(databseFile, null);
 
         String sqlSelect = "SELECT * FROM "+ context.getString(R.string.TABLE_NAME) +
-                " WHERE _id="+ appWidgetId;
+                " WHERE "+context.getString(R.string._ID)+"="+ appWidgetId;
         Cursor cursor = sqliteDB.rawQuery(sqlSelect, null) ;
         cursor.moveToNext();
 
@@ -114,7 +115,7 @@ public class CountWidget extends AppWidgetProvider {
 
         String sqlUpdate = "UPDATE "+ context.getString(R.string.TABLE_NAME) +
                 " SET " + context.getString(R.string.COLUMN_NAME_CURRENT)+"="+changeCurrent+
-                " WHERE _ID="+appWidgetId ;
+                " WHERE "+context.getString(R.string._ID)+"="+appWidgetId ;
 
         sqliteDB.execSQL(sqlUpdate) ;
 
@@ -160,7 +161,7 @@ public class CountWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             Log.d(TAG, "-----------------------------------onDeleted()----------------------------------- ");
             String sqlDelete = "DELETE FROM "+ context.getString(R.string.TABLE_NAME) +
-                    " WHERE _ID="+ appWidgetId;
+                    " WHERE "+context.getString(R.string._ID)+"="+ appWidgetId;
 
             sqliteDB.execSQL(sqlDelete) ;
         }

@@ -106,7 +106,7 @@ public class CountWidgetConfigureActivity extends Activity implements RecyclerAd
             sqliteDB.execSQL(sqlCreateTbl);
 
             String sqlSelect = "SELECT * FROM " + getString(R.string.TABLE_NAME) +
-                    " WHERE _ID=" + appWidgetId;
+                    " WHERE "+getString(R.string._ID)+"=" + appWidgetId;
 
             Cursor cursor = sqliteDB.rawQuery(sqlSelect, null);
             if(cursor.moveToNext()) {
@@ -133,7 +133,6 @@ public class CountWidgetConfigureActivity extends Activity implements RecyclerAd
 
             e.printStackTrace() ;
         }
-
 
         setRecyclerView();
     }

@@ -1,25 +1,29 @@
 package com.eun.percentify;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements RecyclerMainAdapter.OnListItemSelectedInterface {
+public class MainActivity extends AppCompatActivity implements RecyclerMainAdapter.OnListItemSelectedInterface, SwipeRefreshLayout.OnRefreshListener {
     private final static String TAG="@@@@MainActivity";
     private ArrayList<WidgetItem> widgetList;
     String filename = "Widgets.db";
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     // RecyclerView
     private int mPosition;
@@ -35,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerMainAdapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mSwipeRefreshLayout = findViewById(R.id.swipe);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         try {
             File databseFile = getDatabasePath(filename);
@@ -48,14 +54,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerMainAdapt
             e.printStackTrace() ;
         }
 
-        if(getWidgetData()){
-            Intent intent = new Intent(getApplicationContext(),EmptyActivity.class);
-            startActivity(intent);//액티비티 띄우기
-        }
+        getWidgetData();
         setRecyclerView();
     }
 
-    private void setRecyclerView() {
+    public void setRecyclerView() {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -66,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerMainAdapt
         mAdapter.notifyDataSetChanged();
     }
 
-    public boolean getWidgetData() {
+    public void getWidgetData() {
         widgetList = new ArrayList<>();
         boolean isEmpty = true;
 
@@ -99,7 +102,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerMainAdapt
         } catch (Exception e){
             e.printStackTrace();
         }
-        return isEmpty;
+
+        if(isEmpty){
+            Intent intent = new Intent(getApplicationContext(),EmptyActivity.class);
+            startActivity(intent);//액티비티 띄우기
+        }
     }
 
     @Override
@@ -126,5 +133,18 @@ public class MainActivity extends AppCompatActivity implements RecyclerMainAdapt
             intent.putExtra("appWidgetId", appWidgetId);
             startActivity(intent);
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        mSwipeRefreshLayout.setRefreshing(true);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getWidgetData();
+                setRecyclerView();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        },0);
     }
 }

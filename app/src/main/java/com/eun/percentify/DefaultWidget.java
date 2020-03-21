@@ -25,7 +25,7 @@ public class DefaultWidget extends AppWidgetProvider {
     private int mPosition;
     private RemoteViews views;
     private Cursor cursor;
-    private Timer timer;
+//    private Timer timer;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -41,12 +41,12 @@ public class DefaultWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             Log.d(TAG, "-----------------------------------onDeleted()----------------------------------- ");
             Log.d(TAG, "onDeleted: "+appWidgetId);
-            timer.cancel();
+//            timer.cancel();
             File databseFile = context.getDatabasePath(filename);
             SQLiteDatabase sqliteDB = SQLiteDatabase.openOrCreateDatabase(databseFile, null);
 
             String sqlDelete = "DELETE FROM "+ context.getString(R.string.TABLE_NAME) +
-                    " WHERE _ID="+ appWidgetId;
+                    " WHERE "+context.getString(R.string._ID)+"="+ appWidgetId;
 
             sqliteDB.execSQL(sqlDelete) ;
         }
@@ -67,8 +67,8 @@ public class DefaultWidget extends AppWidgetProvider {
         Log.d(TAG, "-----------------------------------updateAppWidget()----------------------------------- ");
         views = new RemoteViews(context.getPackageName(), R.layout.default_widget);
 
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new updateTimer(context, appWidgetManager, appWidgetId), 1000, 1000);
+//        timer = new Timer();
+//        timer.scheduleAtFixedRate(new updateTimer(context, appWidgetManager, appWidgetId), 1000, 1000);
 
         setUpdate(context, appWidgetId);
 
@@ -90,7 +90,7 @@ public class DefaultWidget extends AppWidgetProvider {
             sqliteDB = SQLiteDatabase.openOrCreateDatabase(databseFile, null);
 
             String sqlSelect = "SELECT * FROM " + context.getString(R.string.TABLE_NAME) +
-                    " WHERE _ID=" + appWidgetId;
+                    " WHERE "+context.getString(R.string._ID)+"=" + appWidgetId;
             cursor = sqliteDB.rawQuery(sqlSelect, null);
             cursor.moveToNext();
 
@@ -134,29 +134,29 @@ public class DefaultWidget extends AppWidgetProvider {
     }
 
 
-    private class updateTimer extends TimerTask{
-        RemoteViews views;
-        AppWidgetManager appWidgetManager;
-        ComponentName componentName;
-        Context mContext;
-        int appWidgetId;
-
-        public updateTimer(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
-            this.appWidgetManager = appWidgetManager;
-            views = new RemoteViews(context.getPackageName(), R.layout.default_widget);
-            componentName = new ComponentName(context, updateTimer.class);
-            mContext = context;
-            this.appWidgetId = appWidgetId;
-        }
-
-        @Override
-        public void run() {
-            setUpdate(mContext, appWidgetId);
-            appWidgetManager.updateAppWidget(componentName, views);
-
-            Log.d(TAG, "run: timer "+appWidgetId);
-        }
-
-    }
+//    private class updateTimer extends TimerTask{
+//        RemoteViews views;
+//        AppWidgetManager appWidgetManager;
+//        ComponentName componentName;
+//        Context mContext;
+//        int appWidgetId;
+//
+//        public updateTimer(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
+//            this.appWidgetManager = appWidgetManager;
+//            views = new RemoteViews(context.getPackageName(), R.layout.default_widget);
+//            componentName = new ComponentName(context, updateTimer.class);
+//            mContext = context;
+//            this.appWidgetId = appWidgetId;
+//        }
+//
+//        @Override
+//        public void run() {
+//            setUpdate(mContext, appWidgetId);
+//            appWidgetManager.updateAppWidget(componentName, views);
+//
+//            Log.d(TAG, "run: timer "+appWidgetId);
+//        }
+//
+//    }
 }
 

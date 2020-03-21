@@ -115,7 +115,7 @@ public class DefaultWidgetConfigureActivity extends Activity implements Recycler
         sqliteDB.execSQL(sqlCreateTbl) ;
 
         String sqlSelect = "SELECT * FROM " + getString(R.string.TABLE_NAME) +
-                " WHERE _ID=" + appWidgetId;
+                " WHERE "+getString(R.string._ID)+"=" + appWidgetId;
 
         Cursor cursor = sqliteDB.rawQuery(sqlSelect, null);
         if(cursor.moveToNext()){
@@ -341,6 +341,7 @@ public class DefaultWidgetConfigureActivity extends Activity implements Recycler
                 Log.d(TAG, String.format("onClick: start: %d\tcurrent: %d\tfinish: %d", start, current, finish));
                 SetProgressManager.setProgress(views, mType, mTitle, unit, start, current, finish);
                 SetProgressManager.setTheme(mContext, views, mPosition);
+
                 finishConfigure();
             }
         });
