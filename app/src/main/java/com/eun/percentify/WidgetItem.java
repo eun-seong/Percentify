@@ -3,11 +3,20 @@ package com.eun.percentify;
 public class WidgetItem {
     private int id;
     private String type;
+    private String title;
     private int theme;
     private String unit;
     private int start;
     private int current;
     private int finish;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public int getId() {
         return id;

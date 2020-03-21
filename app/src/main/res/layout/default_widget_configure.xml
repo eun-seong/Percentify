@@ -108,7 +108,7 @@
                     android:layout_height="20dp"
                     android:layout_marginTop="8dp"
                     android:max="100"
-                    android:progress="37"
+                    android:progress="59"
                     android:progressDrawable="@drawable/progressbar_theme"
                     />
             </LinearLayout>
@@ -124,34 +124,112 @@
             <TextView style="@style/titleStyle"
                 android:text="@string/setRange"/>
 
-            <RadioGroup
-                android:id="@+id/radioGroup"
-                android:orientation="horizontal"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                >
-                <RadioButton style="@style/radioButton"
-                    android:id="@+id/rg_btn1"
-                    android:text="@string/today"
-                    android:background="@drawable/preview_bt_round"
-                    />
-                <RadioButton style="@style/radioButton"
-                    android:id="@+id/rg_btn2"
-                    android:text="@string/week"
-                    android:background="@drawable/preview_bt_round"
-                    />
-                <RadioButton style="@style/radioButton"
-                    android:id="@+id/rg_btn3"
-                    android:text="@string/month"
-                    android:background="@drawable/preview_bt_round"
-                    />
-                <RadioButton style="@style/radioButton"
-                    android:id="@+id/rg_btn4"
-                    android:text="@string/year"
-                    android:background="@drawable/preview_bt_round"
-                    />
-            </RadioGroup>
+                android:orientation="vertical">
+                <RadioGroup
+                    android:id="@+id/radioGroup0"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <RadioButton style="@style/radioButton"
+                        android:id="@+id/rg_btn1"
+                        android:text="@string/today"
+                        android:background="@drawable/radio_bt"
+                        />
+                    <RadioButton style="@style/radioButton"
+                        android:id="@+id/rg_btn2"
+                        android:text="@string/week"
+                        android:background="@drawable/radio_bt"
+                        />
+                    <RadioButton style="@style/radioButton"
+                        android:id="@+id/rg_btn3"
+                        android:text="@string/month"
+                        android:background="@drawable/radio_bt"
+                        />
+                    <RadioButton style="@style/radioButton"
+                        android:id="@+id/rg_btn4"
+                        android:text="@string/year"
+                        android:background="@drawable/radio_bt"
+                        />
+                </RadioGroup>
+
+                <RadioGroup
+                    android:id="@+id/radioGroup1"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <RadioButton style="@style/radioButton"
+                        android:id="@+id/rg_btn5"
+                        android:text="@string/selectDate"
+                        android:background="@drawable/radio_bt"
+                        />
+                </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/date_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp"
+                    >
+                    <TextView style="@style/titleStyle"
+                        android:paddingEnd="5dp"
+                        android:text="@string/title"/>
+                    <EditText
+                        android:id="@+id/title_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+                    <TextView style="@style/titleStyle"
+                        android:paddingEnd="5dp"
+                        android:text="시작 날짜"/>
+                    <Button style="@style/submitButton"
+                        android:id="@+id/date_start"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="선택"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp"
+                    >
+                    <TextView style="@style/titleStyle"
+                        android:paddingEnd="5dp"
+                        android:text="종료 날짜"/>
+                    <Button style="@style/submitButton"
+                        android:id="@+id/date_finish"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="선택"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
         </LinearLayout>
     </ScrollView>
 

@@ -16,7 +16,8 @@ import java.util.Arrays;
 
 public class RecyclerMainAdapter extends RecyclerView.Adapter<RecyclerMainAdapter.WidgetViewHolder> {
     private final static String TAG = "@@@@RecyclerAdapter";
-    private static ArrayList<WidgetItem> listWidget;
+    private static OnListItemSelectedInterface mListener;
+    private static ArrayList<WidgetItem> mListWidget = null;
     private static ArrayList<Integer> listResId = new ArrayList<>(Arrays.asList(
             R.drawable._widgettheme_0,
             R.drawable._widgettheme_1,
@@ -28,16 +29,10 @@ public class RecyclerMainAdapter extends RecyclerView.Adapter<RecyclerMainAdapte
             R.drawable._widgettheme_7,
             R.drawable._widgettheme_8
     ));
-    private Context mContext;
 
-    private static OnListItemSelectedInterface mListener;
-
-    public RecyclerMainAdapter(ArrayList<WidgetItem> listWidget
-            ,Context context
-            , OnListItemSelectedInterface listener) {
-        this.listWidget = new ArrayList<>(listWidget);
-        this.mContext = context;
-        this.mListener = listener;
+    public RecyclerMainAdapter(ArrayList<WidgetItem> listWidget, OnListItemSelectedInterface listener) {
+        mListWidget = listWidget;
+        mListener = listener;
     }
 
     public static class WidgetViewHolder extends RecyclerView.ViewHolder {
@@ -52,8 +47,8 @@ public class RecyclerMainAdapter extends RecyclerView.Adapter<RecyclerMainAdapte
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "appWidgetId = "+ listWidget.get(getAdapterPosition()).getId());
-                    mListener.onItemSelected(v, listWidget.get(getAdapterPosition()).getId());
+                    Log.d(TAG, "appWidgetId = "+ mListWidget.get(getAdapterPosition()).getId());
+                    mListener.onItemSelected(v, mListWidget.get(getAdapterPosition()).getId());
                 }
             });
         }
@@ -67,22 +62,22 @@ public class RecyclerMainAdapter extends RecyclerView.Adapter<RecyclerMainAdapte
     @Override
     public RecyclerMainAdapter.WidgetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_main, parent, false);
-
         WidgetViewHolder vh = new WidgetViewHolder(v);
+
         return vh;
     }
 
     @Override
     public void onBindViewHolder(WidgetViewHolder holder, int position) {
-        holder.textView.setText(listWidget.get(position).getType());
+        holder.textView.setText(mListWidget.get(position).getTitle());
 
-        holder.onBind(listWidget.get(position).getTheme());
+        holder.onBind(mListWidget.get(position).getTheme());
         holder.imageView.setClipToOutline(true);
     }
 
     @Override
     public int getItemCount() {
-        return listWidget.size();
+        return mListWidget.size();
     }
 
     public interface OnListItemSelectedInterface {

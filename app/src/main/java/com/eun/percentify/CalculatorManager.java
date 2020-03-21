@@ -75,6 +75,11 @@ public class CalculatorManager {
         if(gc.isLeapYear((int)year)) monthDays[1]+=1;
         return (int)monthDays[(int)month-1];
     }
+    public static int getYearEnd(){
+        init();
+        if(gc.isLeapYear((int)year)) return 366;
+        return 365;
+    }
 
     public static String getCurrentYear(){
         init();
@@ -96,37 +101,23 @@ public class CalculatorManager {
         return Integer.toString((int)hour);
     }
 
-    public static String getCurrentDaynum(){
-        init();
-        String dayString=new String();
-        switch ((int)dayNum){
-            case 1:
-                dayString = "월";
-                break;
+    public static String getCurrentDayName(int cur){
+        switch (cur){
             case 2:
-                dayString = "화";
-                break;
+                return "월";
             case 3:
-                dayString = "수";
-                break;
+                return "화";
             case 4:
-                dayString = "목";
-                break;
+                return "수";
             case 5:
-                dayString = "금";
-                break;
+                return "목";
             case 6:
-                dayString = "토";
-                break;
+                return "금";
             case 7:
-                dayString = "일";
-                break;
+                return "토";
+            case 1:
+                return "일";
         }
-        return dayString;
-    }
-
-    public static String getCurrentYearnum(){
-        init();
-        return Integer.toString((int)yearNum);
+        return "";
     }
 }

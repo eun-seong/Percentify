@@ -6,9 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -22,15 +20,11 @@ public class CountWidget extends AppWidgetProvider {
     private static final String TAG = "@@@@DefaultWidget";
     private static final String ACTION_BUTTON_UP = "com.example.dday.ACTION_BUTTON_UP";
     private static final String ACTION_BUTTON_DOWN = "com.example.dday.ACTION_BUTTON_DOWN";
-    private static RemoteViews views;
-    private String Title;
-    private int mPosition;
-    private String unit;
-    private int start;
-    private int current;
-    private int finish;
-    private Cursor cursor;
     String filename = "Widgets.db";
+    private int start, current, finish, mPosition;
+    private static RemoteViews views;
+    private String mTitle, mType, unit;
+    private Cursor cursor;
 
     public void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         Log.d(TAG, "----------------------updateAppWidget()---------------------- ");
@@ -49,12 +43,13 @@ public class CountWidget extends AppWidgetProvider {
             cursor = sqliteDB.rawQuery(sqlSelect, null);
             cursor.moveToNext();
 
-            Title = cursor.getString(1);
-            mPosition = cursor.getInt(2);
-            unit = cursor.getString(3);
-            start = cursor.getInt(4);
-            current = cursor.getInt(5);
-            finish = cursor.getInt(6);
+            mType = cursor.getString(1);
+            mTitle = cursor.getString(2);
+            mPosition = cursor.getInt(3);
+            unit = cursor.getString(4);
+            start = cursor.getInt(5);
+            current = cursor.getInt(6);
+            finish = cursor.getInt(7);
 
         } catch (Exception e){
             e.printStackTrace();
@@ -63,11 +58,8 @@ public class CountWidget extends AppWidgetProvider {
             sqliteDB = SQLiteDatabase.openOrCreateDatabase(databaseFile, null);
         }
 
-        int percent = Math.round(((float)(current-start))/(float)(finish-start)*100);
-        String range = start+" "+unit+" - "+finish+" "+unit;
-
         if(mPosition != -1) SetProgressManager.setTheme(context, views, mPosition);
-        SetProgressManager.setProgress(views, percent, Title, range, current+ " "+unit);
+        SetProgressManager.setProgress(views,mType, mTitle, " "+unit, start, current, finish);
 
         /********************** Intent **********************/
         Intent intentUp     = new Intent(context, CountWidget.class);
@@ -105,20 +97,19 @@ public class CountWidget extends AppWidgetProvider {
         String sqlSelect = "SELECT * FROM "+ context.getString(R.string.TABLE_NAME) +
                 " WHERE _id="+ appWidgetId;
         Cursor cursor = sqliteDB.rawQuery(sqlSelect, null) ;
-
         cursor.moveToNext();
-        int position = cursor.getInt(2);
-        unit = cursor.getString(3);
-        start = cursor.getInt(4);
-        current = cursor.getInt(5);
-        finish = cursor.getInt(6);
+
+        int position = cursor.getInt(3);
+        unit = cursor.getString(4);
+        start = cursor.getInt(5);
+        current = cursor.getInt(6);
+        finish = cursor.getInt(7);
         /************* SQLite *************/
 
         int changeCurrent = current + val;
         if((current==start && val== -1) || (current==finish && val == 1)) return;
 
-        int percent = Math.round((float)(changeCurrent - start) / (float)(finish - start) * 100);
-        SetProgressManager.setCurrent(views, percent, changeCurrent+ " "+unit);
+        SetProgressManager.setCurrent(views, mType," "+unit, start, changeCurrent, finish);
         SetProgressManager.setTheme(context, views, position);
 
         String sqlUpdate = "UPDATE "+ context.getString(R.string.TABLE_NAME) +
@@ -163,10 +154,11 @@ public class CountWidget extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] appWidgetIds){
         super.onDeleted(context,appWidgetIds);
-        for (int appWidgetId : appWidgetIds) {
-            File databseFile = context.getDatabasePath(filename);
-            SQLiteDatabase sqliteDB = SQLiteDatabase.openOrCreateDatabase(databseFile, null);
+        File databseFile = context.getDatabasePath(filename);
+        SQLiteDatabase sqliteDB = SQLiteDatabase.openOrCreateDatabase(databseFile, null);
 
+        for (int appWidgetId : appWidgetIds) {
+            Log.d(TAG, "-----------------------------------onDeleted()----------------------------------- ");
             String sqlDelete = "DELETE FROM "+ context.getString(R.string.TABLE_NAME) +
                     " WHERE _ID="+ appWidgetId;
 

@@ -18,9 +18,7 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements RecyclerMainAdapter.OnListItemSelectedInterface {
     private final static String TAG="@@@@MainActivity";
-    private Date currentTime;
-    private ArrayList widgetList;
-    private WidgetDatabaseManager databaseManager;
+    private ArrayList<WidgetItem> widgetList;
     String filename = "Widgets.db";
 
     // RecyclerView
@@ -50,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerMainAdapt
             e.printStackTrace() ;
         }
 
-        if(!getWidgetData()){
+        if(getWidgetData()){
             Intent intent = new Intent(getApplicationContext(),EmptyActivity.class);
             startActivity(intent);//액티비티 띄우기
         }
@@ -59,17 +57,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerMainAdapt
 
     private void setRecyclerView() {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
         recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        // use a linear layout manager
-        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-
-        // specify an adapter (see also next example)
-        mAdapter = new RecyclerMainAdapter(widgetList, this, this);
+        mAdapter = new RecyclerMainAdapter(widgetList, this);
         recyclerView.setAdapter(mAdapter);
 
         mAdapter.notifyDataSetChanged();
@@ -77,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerMainAdapt
 
     public boolean getWidgetData() {
         widgetList = new ArrayList<>();
-        boolean isEmpty = false;
+        boolean isEmpty = true;
 
         try {
             String sqlSelect = "SELECT * FROM " + getString(R.string.TABLE_NAME);
@@ -86,19 +77,21 @@ public class MainActivity extends AppCompatActivity implements RecyclerMainAdapt
 
             if(cursor != null)
             {
+                isEmpty = false;
                 while (cursor.moveToNext())
                 {
-                    isEmpty = true;
                     WidgetItem currentData = new WidgetItem();
 
                     currentData.setId(cursor.getInt(0));
                     currentData.setType(cursor.getString(1));
-                    currentData.setTheme(cursor.getInt(2));
-                    currentData.setUnit(cursor.getString(3));
-                    currentData.setStart(cursor.getInt(4));
-                    currentData.setCurrent(cursor.getInt(5));
-                    currentData.setFinish(cursor.getInt(6));
+                    currentData.setTitle(cursor.getString(2));
+                    currentData.setTheme(cursor.getInt(3));
+                    currentData.setUnit(cursor.getString(4));
+                    currentData.setStart(cursor.getInt(5));
+                    currentData.setCurrent(cursor.getInt(6));
+                    currentData.setFinish(cursor.getInt(7));
 
+                    Log.d(TAG, "getWidgetData: add "+currentData.getTitle());
                     widgetList.add(currentData);
                 }
             }
@@ -111,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerMainAdapt
 
     @Override
     public void onItemSelected(View v, int appWidgetId) {
-//        RecyclerMainAdapter.WidgetViewHolder viewHolder = (RecyclerMainAdapter.WidgetViewHolder)recyclerView.findViewHolderForAdapterPosition(position);
         Log.d(TAG, "onItemSelected: "+appWidgetId);
 
         this.appWidgetId=appWidgetId;
@@ -122,9 +114,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerMainAdapt
         cursor = sqliteDB.rawQuery(sqlSelect, null);
         cursor.moveToNext();
 
-        String type = cursor.getString(1);
+        String mType = cursor.getString(1);
+        String mTitle = cursor.getString(2);
 
-        if(type.equals("today")||type.equals("week")||type.equals("month")||type.equals("year")) {
+        if(mType.equals("today")||mType.equals("week")||mType.equals("month")||mType.equals("year")||mType.equals("dday")) {
             Intent intent = new Intent(getApplicationContext(), DefaultWidgetConfigureActivity.class);
             intent.putExtra("appWidgetId", appWidgetId);
             startActivity(intent);
